@@ -12,23 +12,61 @@ import static org.junit.Assert.*;
 
 class GroupOfStudentsTest {
 
+    ArrayList<Student> students = new ArrayList<>();
+    ArrayList<Subject> subjects = new ArrayList<>();
+
     @Before
             void init () {
-        ArrayList<Student> students = new ArrayList<>();
-        students.add(new Student(0, "Дурак");
-               ArrayList<Subject> subjects = new ArrayList<>();
+        students.add(new Student ("Шамаро Ростислав Витальевич"));
+        students.add(new Student("Буглаев Семен Алексеевич"));
+        students.add(new Student("Силюков Максим Андреевич "));
+        students.add(new Student("Мостовая Ирина Александровна"));
+        students.add(new Student("Морозов Никита Ильич"));
 
-        Map<Student, Integer> mapa = new HashMap<>();
-        mapa.put(students.get(0), 5);
-        subjects.add(new Subject("МАТЕША", mapa))
-        mapa.put(students.get(1), 5);
+        Map<Student, Integer> map = new HashMap<>();
+        map.put(students.get(0), 5);
+        map.put(students.get(1), 5);
+        map.put(students.get(2), 3);
+        map.put(students.get(3), 3);
+        map.put(students.get(4), 4);
+
+        subjects.add(new Subject("Высшая Математика", map));
+
+        map.clear();
+
+        map.put(students.get(0), 3);
+        map.put(students.get(1), 4);
+        map.put(students.get(2), 2);
+        map.put(students.get(3), 5);
+        map.put(students.get(4), 5);
+
+        subjects.add(new Subject("История", map));
+
+        map.clear();
+
+        map.put(students.get(0), 3);
+        map.put(students.get(1), 2);
+        map.put(students.get(2), 3);
+        map.put(students.get(3), 2);
+        map.put(students.get(4), 3);
+
+        subjects.add(new Subject("Физика", map));
     }
-
-    GroupOfStudents st;
-
 
     @Test
     void addStudent() {
+        Student s1 = new Student("Мелехина Елена Сергеевна");
+        Student s2 = new Student("Макейкин Александр Сергеевич");
+        
+        assertTrue(students.addStudent(s1));
+        assertTrue(students.addStudent(s2));
+        assertFalse(students.addStudent(s1));
+
+
+
+
+
+
         assertEquals(1, 1);
     }
 

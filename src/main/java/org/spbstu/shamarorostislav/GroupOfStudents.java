@@ -1,5 +1,6 @@
 package org.spbstu.shamarorostislav;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -13,13 +14,13 @@ import java.util.Map;
 
 public class GroupOfStudents {
 
-    public GroupOfStudents(Collection<Student> students, Collection<Subject> subjects) {
+    public GroupOfStudents(ArrayList<Student> students, ArrayList<Subject> subjects) {
         this.students = students;
         this.subjects = subjects;
     }
 
-    private final Collection<Subject> subjects;
-    private final Collection<Student> students;
+    private final ArrayList<Student> students;
+    private final ArrayList<Subject> subjects;
 
     public boolean addStudent(Student student) {
         if (student == null) return false;

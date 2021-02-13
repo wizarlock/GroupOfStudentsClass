@@ -1,13 +1,21 @@
 package org.spbstu.shamarorostislav;
 
+import java.util.Map;
+
 public class Student {
-    public String name;
+    private final String fullName;
+    private final Map<String, Integer> grades;
 
+    public Student(String fullName, Map<String, Integer> grades) {
+        this.fullName = fullName;
+        this.grades = grades;
+    }
 
-    public Student(String name) {
-        this.name = name;
+    public String getFullName() {
+        return fullName;
     }
-    public String getName() {
-        return name;
+    public Map<String, Integer> getGrades() {
+        return grades;
     }
+
 }

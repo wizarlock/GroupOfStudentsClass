@@ -1,8 +1,7 @@
 package org.spbstu.shamarorostislav;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
 /*
 Хранит собственный номер, список студентов и их успеваемость по различным предметам.
@@ -12,74 +11,116 @@ import java.util.Map;
 по заданному предмету.
 */
 
+
 public class GroupOfStudents {
 
-    public GroupOfStudents(ArrayList<Student> students, ArrayList<Subject> subjects) {
-        this.students = students;
-        this.subjects = subjects;
+    private String groupNumber;
+
+    public void setGroupNumber(String groupNumber) {
+        this.groupNumber = groupNumber;
     }
 
-    private final ArrayList<Student> students;
-    private final ArrayList<Subject> subjects;
+    public String getGroupNumber() {
+        return groupNumber;
+    }
 
-    public boolean addStudent(Student student) {
-        if (student == null) return false;
+    private final List<Student> students = new ArrayList<>();
+
+    public List<Student> getGroup() {return students;}
+
+
+    public void  addStudent(Student student) {
+        if (student == null || student.getFullName().length() == 0) throw new IllegalArgumentException("IncorrectStudent");
         students.add(student);
-        return true;
     }
 
-    public boolean deleteStudent(String name) {
-        for (Student item : students)
-            if (name.equals(item.getName())) {
-                students.remove(item);
-                return true;
+    public GroupOfStudents(Student... students) {
+        if (students != null)
+            for (Student st : students) {
+                this.addStudent(st);
             }
-        return false;
     }
 
-    public boolean addSubject(Subject subject) {
-        if (subject == null) return false;
-        subjects.add(subject);
-        return true;
+    public  void deleteStudent(String name) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
+        students.removeIf(item -> name.toLowerCase().equals(item.getFullName().toLowerCase()));
     }
 
-    public boolean deleteSubject(String subject) {
-        for (Subject item : subjects)
-            if (subject.equals(item.getName())) {
-                subjects.remove(item);
-                return true;
+    public void addSubject(String subject) {
+        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+        for (Student st : students) {
+            if (!st.getGrades().containsKey(subject)) st.getGrades().put(subject, null);
             }
-        return false;
+        }
+
+    public void deleteSubject(String subject) {
+        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+        for (Student st : students)
+        st.getGrades().remove(subject);
     }
 
-    public Map<Student, Integer> addGrade(String name, String subject, int grade) {
-        Map<Student,Integer> NecessarySubject = null;
-        for (Subject item : subjects)
-            if (subject.equals(item.getName())) NecessarySubject = item.getGrades();
+    public void addGrade(String student, String subject, int grade) {
+        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+        if (student == null || student.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
 
-            assert NecessarySubject != null;
+        boolean flag = false;
 
-            for (Map.Entry<Student, Integer> entry: NecessarySubject.entrySet())
-        if (entry.getKey().getName().equals(name))
-            NecessarySubject.put(entry.getKey(),grade);
-            return NecessarySubject;
+        for (Student st : students)
+            if (student.toLowerCase().equals(st.getFullName().toLowerCase())) {
+                flag = true;
+                break;
+            }
+
+        if (!flag) throw new IllegalArgumentException("Student is absent");
+
+        for (Student st : students)
+            if (student.toLowerCase().equals(st.getFullName().toLowerCase()))
+                if (st.getGrades().containsKey(subject) && st.getGrades().get(subject) == null)
+                    st.getGrades().put(subject, grade);
+                else throw new IllegalArgumentException("The subject is missing or grade is present");
     }
 
-    public Map<Student, Integer> deleteGrade(String name, String subject) {
-        Map<Student,Integer> NecessarySubject = null;
-        for (Subject item : subjects)
-            if (subject.equals(item.getName())) NecessarySubject = item.getGrades();
+    public void changeGrade (String student, String subject, int grade) {
+        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+        if (student == null || student.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
 
-        assert NecessarySubject != null;
+        boolean flag = false;
 
-        for (Map.Entry<Student, Integer> entry: NecessarySubject.entrySet())
-            if (entry.getKey().getName().equals(name))
-                NecessarySubject.put(entry.getKey(),null);
-        return NecessarySubject;
+        for (Student st : students)
+            if (student.toLowerCase().equals(st.getFullName().toLowerCase())) {
+                flag = true;
+                break;
+            }
+
+        if (!flag) throw new IllegalArgumentException("Student is absent");
+
+        for (Student st : students)
+            if (student.toLowerCase().equals(st.getFullName().toLowerCase()))
+                if (st.getGrades().containsKey(subject) && st.getGrades().get(subject) != null)
+                    st.getGrades().put(subject, grade);
+                else throw new IllegalArgumentException("The subject or grade is missing");
     }
 
+    public void deleteGrade (String student, String subject) {
+        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+        if (student == null || student.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
 
+        boolean flag = false;
 
+        for (Student st : students)
+            if (student.toLowerCase().equals(st.getFullName().toLowerCase())) {
+                flag = true;
+                break;
+            }
 
+        if (!flag) throw new IllegalArgumentException("Student is absent");
+
+        for (Student st : students)
+            if (student.toLowerCase().equals(st.getFullName().toLowerCase()))
+                if (st.getGrades().containsKey(subject) && st.getGrades().get(subject) != null)
+                    st.getGrades().put(subject, null);
+                else throw new IllegalArgumentException("The subject or grade is missing");
+    }
 }
+
 

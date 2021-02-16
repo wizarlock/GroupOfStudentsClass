@@ -1,5 +1,6 @@
 package org.spbstu.shamarorostislav;
 
+import java.security.Key;
 import java.util.Map;
 
 public class Student {
@@ -17,5 +18,15 @@ public class Student {
     public Map<String, Integer> getGrades() {
         return grades;
     }
-
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Student)) return false;
+        if (((Student) other).getFullName().equals(this.getFullName())){
+            if (this.getGrades().size() != (((Student) other).getGrades().size())) return false;
+            for (String key: this.getGrades().keySet())
+                if (!this.getGrades().get(key).equals((((Student) other).getGrades().get(key)))) return false;
+            return true;
+        }
+        return false;
+    }
 }

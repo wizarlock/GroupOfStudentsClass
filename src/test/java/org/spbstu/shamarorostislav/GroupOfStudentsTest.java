@@ -7,13 +7,14 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class GroupOfStudentsTest {
 
     GroupOfStudents group;
+    GroupOfStudents group1;
+    GroupOfStudents group2;
 
     @BeforeEach
     void init() {
@@ -163,7 +164,7 @@ class GroupOfStudentsTest {
         });
 
         group.addGrade("Нигматулин Артем Денисович", "Овт", 4);
-        int gr = 0;
+        Integer gr = 0;
         for (Student st : group.getGroup())
             if (st.getFullName().equals("Нигматулин Артем Денисович"))
                 gr = st.getGrades().get("Овт");
@@ -196,7 +197,7 @@ class GroupOfStudentsTest {
         });
 
         group.changeGrade("Декельман Григорий Павлович", "Овт", 4);
-        int gr = 0;
+        Integer gr = 0;
         for (Student st : group.getGroup())
             if (st.getFullName().equals("Декельман Григорий Павлович"))
                 gr = st.getGrades().get("Овт");
@@ -226,11 +227,45 @@ class GroupOfStudentsTest {
         });
 
         group.deleteGrade("Декельман Григорий Павлович", "Овт");
-        int gr = 0;
+        Integer gr = 0;
         for (Student st : group.getGroup())
             if (st.getFullName().equals("Декельман Григорий Павлович")) {
                 gr = st.getGrades().get("Овт");
             }
-        assertEquals(0, gr);
+        assertNull(gr);
+    }
+
+    @Test
+    void testEquals() {
+        Map<String, Integer> educationalPerformanceForStudentShamaro = new HashMap<>();
+        educationalPerformanceForStudentShamaro.put("Киберспорт", 4);
+        educationalPerformanceForStudentShamaro.put("Бжд", 3);
+
+        Map<String, Integer> educationalPerformanceForStudentSuhov = new HashMap<>();
+        educationalPerformanceForStudentSuhov.put("Киберспорт", 5);
+        educationalPerformanceForStudentSuhov.put("Бжд", 2);
+
+        group1 = new GroupOfStudents(
+                new Student("Шамаро Ростислав Витальевич", educationalPerformanceForStudentShamaro),
+                new Student("Сухов Артем Сергеевич", educationalPerformanceForStudentSuhov)
+        );
+        group2 = new GroupOfStudents(
+                new Student("Сухов Артем Сергеевич", educationalPerformanceForStudentSuhov),
+                new Student("Шамаро Ростислав Витальевич", educationalPerformanceForStudentShamaro)
+        );
+        assertEquals(group1, group2);
+
+        group1.deleteStudent("Сухов Артем Сергеевич");
+        assertNotEquals(group1, group2);
+
+        group1 = new GroupOfStudents(
+                new Student("Шамаро Ростислав Витальевич", educationalPerformanceForStudentSuhov),
+                new Student("Сухов Артем Сергеевич", educationalPerformanceForStudentSuhov)
+        );
+        group2 = new GroupOfStudents(
+                new Student("Сухов Артем Сергеевич", educationalPerformanceForStudentSuhov),
+                new Student("Шамаро Ростислав Витальевич", educationalPerformanceForStudentShamaro)
+        );
+        assertNotEquals(group1, group2);
     }
 }

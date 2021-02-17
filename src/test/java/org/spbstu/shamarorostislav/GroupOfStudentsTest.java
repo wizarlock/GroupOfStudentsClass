@@ -267,5 +267,13 @@ class GroupOfStudentsTest {
                 new Student("Шамаро Ростислав Витальевич", educationalPerformanceForStudentShamaro)
         );
         assertNotEquals(group1, group2);
+
+        group1.deleteStudent("Шамаро Ростислав Витальевич");
+        group2.deleteStudent("Шамаро Ростислав Витальевич");
+        group1.deleteStudent("Сухов Артем Сергеевич");
+        group2.deleteStudent("Сухов Артем Сергеевич");
+
+        assertEquals(group1, group2);
+
     }
 }

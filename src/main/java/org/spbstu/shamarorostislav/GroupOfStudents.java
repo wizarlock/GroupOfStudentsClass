@@ -3,6 +3,7 @@ package org.spbstu.shamarorostislav;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 /*
@@ -33,10 +34,11 @@ public class GroupOfStudents {
     }
 
 
-    public void addStudent(Student student) {
-        if (student == null || student.getFullName().length() == 0)
-            throw new IllegalArgumentException("IncorrectStudent");
+    public boolean addStudent(Student student) {
+        if (student == null || student.getFullName().length() == 0) return false;
         students.add(student);
+        System.out.println("Студент появился в списке!");
+        return true;
     }
 
     public GroupOfStudents(Student... students) {
@@ -46,85 +48,67 @@ public class GroupOfStudents {
             }
     }
 
-    public void deleteStudent(String name) {
-        if (name == null || name.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
-        students.removeIf(item -> name.toLowerCase().equals(item.getFullName().toLowerCase()));
+    private Student getNecessaryStudent(String name) {
+        for (Student st : students)
+            if (name.toLowerCase().equals(st.getFullName().toLowerCase()))
+                return st;
+        throw new IllegalArgumentException("The student is not on the list");
     }
 
-    public void addSubject(String subject) {
-        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+    public boolean deleteStudent(String name) {
+        if (name == null || name.length() == 0) return false;
+        students.remove(getNecessaryStudent(name));
+        System.out.println("Теперь студента нет в списке!");
+        return true;
+    }
+
+    public boolean addSubject(String subject) {
+        if (subject == null || subject.length() == 0) return false;
         for (Student st : students) {
             if (!st.getGrades().containsKey(subject)) st.getGrades().put(subject, null);
         }
+        System.out.println("Предмет появился у каждого студента!");
+        return true;
     }
 
-    public void deleteSubject(String subject) {
-        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
+    public boolean deleteSubject(String subject) {
+        if (subject == null || subject.length() == 0) return false;
         for (Student st : students)
             st.getGrades().remove(subject);
+        System.out.println("Предмет удален у каждого студента!");
+        return true;
     }
 
-    public void addGrade(String student, String subject, int grade) {
-        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
-        if (student == null || student.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
-
-        boolean flag = false;
-
-        for (Student st : students)
-            if (student.toLowerCase().equals(st.getFullName().toLowerCase())) {
-                flag = true;
-                break;
-            }
-
-        if (!flag) throw new IllegalArgumentException("Student is absent");
-
-        for (Student st : students)
-            if (student.toLowerCase().equals(st.getFullName().toLowerCase()))
-                if (st.getGrades().containsKey(subject) && st.getGrades().get(subject) == null)
-                    st.getGrades().put(subject, grade);
-                else throw new IllegalArgumentException("The subject is missing or grade is present");
+    public boolean addGrade(String student, String subject, Integer grade) {
+        if (subject == null || subject.length() == 0) return false;
+        if (student == null || student.length() == 0) return false;
+        if (grade < 1 || grade > 5)  return false;
+        if (getNecessaryStudent(student).getGrades().containsKey(subject) && getNecessaryStudent(student).getGrades().get(subject) == null)
+            getNecessaryStudent(student).getGrades().put(subject, grade);
+                else return false;
+        System.out.println("Оценка добавлена у студента!");
+                return true;
     }
 
-    public void changeGrade(String student, String subject, int grade) {
-        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
-        if (student == null || student.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
-
-        boolean flag = false;
-
-        for (Student st : students)
-            if (student.toLowerCase().equals(st.getFullName().toLowerCase())) {
-                flag = true;
-                break;
-            }
-
-        if (!flag) throw new IllegalArgumentException("Student is absent");
-
-        for (Student st : students)
-            if (student.toLowerCase().equals(st.getFullName().toLowerCase()))
-                if (st.getGrades().containsKey(subject) && st.getGrades().get(subject) != null)
-                    st.getGrades().put(subject, grade);
-                else throw new IllegalArgumentException("The subject or grade is missing");
+    public boolean changeGrade(String student, String subject, Integer grade) {
+        if (subject == null || subject.length() == 0) return false;
+        if (student == null || student.length() == 0) return false;
+        if (grade < 1 || grade > 5)  return false;
+        if (getNecessaryStudent(student).getGrades().containsKey(subject) && getNecessaryStudent(student).getGrades().get(subject) != null)
+            getNecessaryStudent(student).getGrades().put(subject, grade);
+        else return false;
+        System.out.println("Оценка изменена у студента!");
+        return true;
     }
 
-    public void deleteGrade(String student, String subject) {
-        if (subject == null || subject.length() == 0) throw new IllegalArgumentException("IncorrectSubject");
-        if (student == null || student.length() == 0) throw new IllegalArgumentException("IncorrectStudent");
-
-        boolean flag = false;
-
-        for (Student st : students)
-            if (student.toLowerCase().equals(st.getFullName().toLowerCase())) {
-                flag = true;
-                break;
-            }
-
-        if (!flag) throw new IllegalArgumentException("Student is absent");
-
-        for (Student st : students)
-            if (student.toLowerCase().equals(st.getFullName().toLowerCase()))
-                if (st.getGrades().containsKey(subject) && st.getGrades().get(subject) != null)
-                    st.getGrades().put(subject, null);
-                else throw new IllegalArgumentException("The subject or grade is missing");
+    public boolean deleteGrade(String student, String subject) {
+        if (subject == null || subject.length() == 0) return false;
+        if (student == null || student.length() == 0) return false;
+        if (getNecessaryStudent(student).getGrades().containsKey(subject) && getNecessaryStudent(student).getGrades().get(subject) != null)
+        getNecessaryStudent(student).getGrades().put(subject, null);
+        else return false;
+        System.out.println("Оценка удалена у студента!");
+        return true;
     }
 
     @Override
@@ -142,8 +126,8 @@ public class GroupOfStudents {
            if (!((GroupOfStudents) other).getGroup().contains(this.getGroup().get(i))) return false;
     }
         return true;
-
     }
-}
+    }
+
 
 

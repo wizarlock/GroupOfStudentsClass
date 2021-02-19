@@ -2,6 +2,7 @@ package org.spbstu.shamarorostislav;
 
 import java.security.Key;
 import java.util.Map;
+import java.util.Objects;
 
 public class Student {
     private final String fullName;
@@ -10,6 +11,8 @@ public class Student {
     public Student(String fullName, Map<String, Integer> grades) {
         this.fullName = fullName;
         this.grades = grades;
+
+
     }
 
     public String getFullName() {
@@ -18,6 +21,9 @@ public class Student {
     public Map<String, Integer> getGrades() {
         return grades;
     }
+
+    //Наллпоинтер, чекеры на значения оценок, выдача коллекций отказаться, исключения
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Student)) return false;
@@ -28,5 +34,10 @@ public class Student {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, grades);
     }
 }

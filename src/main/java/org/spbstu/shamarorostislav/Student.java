@@ -1,18 +1,36 @@
 package org.spbstu.shamarorostislav;
 
-import java.security.Key;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Student {
-    private final String fullName;
+    public static final int MIN_MARK = 1;
+    public static final int MAX_MARK = 5;
+    private final String fullName ;
     private final Map<String, Integer> grades;
 
-    public Student(String fullName, Map<String, Integer> grades) {
+    public Student(@NotNull String fullName, Map<@NotNull String, Integer> grades) {
+        if (fullName.isEmpty())
+            throw new IllegalArgumentException("Name must be not empty");
+
+        if (grades != null) {
+            for (Map.Entry<String, Integer> grade : grades.entrySet()) {
+                if (grade.getKey().isEmpty())
+                    throw new IllegalArgumentException("Subject's name must be not empty");
+
+                if (grade.getValue() != null && (grade.getValue() < MIN_MARK || grade.getValue() > MAX_MARK))
+                    throw new IllegalArgumentException(
+                            "Mark must be in [" + MIN_MARK + ", " + MAX_MARK + ", but was: " + grade.getValue()
+                    );
+            }
+            this.grades = grades;
+        } else {
+            this.grades = new HashMap<>();
+        }
         this.fullName = fullName;
-        this.grades = grades;
-
-
     }
 
     public String getFullName() {
@@ -21,8 +39,6 @@ public class Student {
     public Map<String, Integer> getGrades() {
         return grades;
     }
-
-    //Наллпоинтер, чекеры на значения оценок, выдача коллекций отказаться, исключения
 
     @Override
     public boolean equals(Object other) {

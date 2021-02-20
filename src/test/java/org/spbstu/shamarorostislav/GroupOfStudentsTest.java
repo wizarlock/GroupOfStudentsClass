@@ -15,6 +15,7 @@ class GroupOfStudentsTest {
     GroupOfStudents group;
     GroupOfStudents group1;
     GroupOfStudents group2;
+    Map<String, Integer> educationalPerformanceForStudent5 = new HashMap<>();
 
     @BeforeEach
     void init() {
@@ -41,7 +42,7 @@ class GroupOfStudentsTest {
         educationalPerformanceForStudent2.put("Овт", 2);
 
         Map<String, Integer> educationalPerformanceForStudent3 = new HashMap<>();
-        educationalPerformanceForStudent3.put("Высшая математика", 4);
+        educationalPerformanceForStudent3.put("Высшая математика", 5);
         educationalPerformanceForStudent3.put("Физика", 4);
         educationalPerformanceForStudent3.put("Программирование", 3);
         educationalPerformanceForStudent3.put("Физическая культура", 4);
@@ -64,8 +65,25 @@ class GroupOfStudentsTest {
     }
 
     @Test
+    void testClassStudent(){
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Student("", educationalPerformanceForStudent5));
+
+        educationalPerformanceForStudent5.put("Высшая математика", 10);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Student("Сухов Артем Сергеевич", educationalPerformanceForStudent5));
+
+        educationalPerformanceForStudent5.remove("Высшая математика");
+        educationalPerformanceForStudent5.put("", 5);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Student("Сухов Артем Сергеевич", educationalPerformanceForStudent5));
+    }
+
+    @Test
     void addStudent() {
-        Map<String, Integer> educationalPerformanceForStudent5 = new HashMap<>();
 
         Student s1 = new Student("Поленков Владислав Вадимович", educationalPerformanceForStudent5);
         assertTrue(group.addStudent(s1));
@@ -73,15 +91,11 @@ class GroupOfStudentsTest {
         Student s2 = new Student("Сухов Артем Сергеевич", educationalPerformanceForStudent5);
         assertTrue(group.addStudent(s2));
 
-        Student s3 = new Student("", educationalPerformanceForStudent5);
-        assertFalse(group.getGroup().contains(s3));
-
         assertFalse(group.addStudent(null));
     }
 
     @Test
     void deleteStudent() {
-        Map<String, Integer> educationalPerformanceForStudent5 = new HashMap<>();
 
         Student s1 = new Student("Поленков Владислав Вадимович", educationalPerformanceForStudent5);
 
@@ -120,7 +134,6 @@ class GroupOfStudentsTest {
 
     @Test
     void addGrade() {
-
         assertFalse(group.addGrade(null, "Высшая математика", 5));
         assertFalse(group.addGrade("", "Высшая математика", 5));
         assertFalse(group.addGrade("Шамаро Ростислав Витальевич", "", 5));

@@ -1,6 +1,9 @@
 package org.spbstu.shamarorostislav;
 
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,20 +34,28 @@ public class GroupOfStudents {
 
     private final List<Student> students = new ArrayList<>();
 
-    public List<Student> getGroup() {
-        return students;
+        public List<Student> getGroup() {
+        return this.students;
     }
 
 
+    private boolean checkIsValid(Object obj) {
+
+        if (obj instanceof Integer) return (Integer) obj >= MIN_MARK && (Integer) obj <= MAX_MARK;
+        if (obj == null) return false;
+        if (obj instanceof String) return !((String) obj).isEmpty();
+        return true;
+    }
+
     public boolean addStudent(Student student) {
-        if (student == null) return false;
+        if (!checkIsValid(student)) return false;
         students.add(student);
         System.out.println("Студент появился в списке!");
         return true;
     }
 
     public GroupOfStudents(Student... students) {
-        if (students != null)
+        if (checkIsValid(students))
             for (Student st : students) {
                 this.addStudent(st);
             }
@@ -54,27 +65,30 @@ public class GroupOfStudents {
         for (Student st : students)
             if (name.toLowerCase().equals(st.getFullName().toLowerCase()))
                 return st;
-        throw new IllegalArgumentException("The student is not on the list");
+            return null;
     }
 
     public boolean deleteStudent(String name) {
-        if (name == null || name.isEmpty()) return false;
+        if (!checkIsValid(name)) return false;
+        if (!checkIsValid(getNecessaryStudent(name))) return false;
         students.remove(getNecessaryStudent(name));
         System.out.println("Теперь студент " + name + " отсутствует в списке!");
         return true;
     }
 
     public boolean addSubject(String subject) {
-        if (subject == null || subject.isEmpty()) return false;
+        if (!checkIsValid(subject)) return false;
+
         for (Student st : students) {
-            if (!st.getGrades().containsKey(subject)) st.getGrades().put(subject, null);
+            if (!st.getGrades().keySet().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(subject.toLowerCase()))
+                st.getGrades().put(subject, null);
         }
         System.out.println("Предмет " + subject + " появился у каждого студента!");
         return true;
     }
 
     public boolean deleteSubject(String subject) {
-        if (subject == null || subject.isEmpty()) return false;
+        if (!checkIsValid(subject)) return false;
         for (Student st : students)
             st.getGrades().remove(subject);
         System.out.println("Предмет " + subject + " удален у каждого студента!");
@@ -82,32 +96,41 @@ public class GroupOfStudents {
     }
 
     public boolean addGrade(String student, String subject, Integer grade) {
-        if (subject == null || subject.isEmpty()) return false;
-        if (student == null || student.isEmpty()) return false;
-        if (grade < MIN_MARK || grade > MAX_MARK)  return false;
-        if (getNecessaryStudent(student).getGrades().containsKey(subject) && getNecessaryStudent(student).getGrades().get(subject) == null)
-            getNecessaryStudent(student).getGrades().put(subject, grade);
+        if (!checkIsValid(student)) return false;
+        if (!checkIsValid(subject)) return false;
+        if (!checkIsValid(grade)) return false;
+        if (!checkIsValid(getNecessaryStudent(student))) return false;
+
+        if (Objects.requireNonNull(getNecessaryStudent(student)).getGrades().containsKey(subject) &&
+                Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) == null)
+            Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, grade);
                 else return false;
         System.out.println("Оценка добавлена у " + student + " по предмету " + subject + "!");
                 return true;
     }
 
     public boolean changeGrade(String student, String subject, Integer grade) {
-        if (subject == null || subject.isEmpty()) return false;
-        if (student == null || student.isEmpty()) return false;
-        if (grade < MIN_MARK || grade > MAX_MARK)  return false;
-        if (getNecessaryStudent(student).getGrades().containsKey(subject) && getNecessaryStudent(student).getGrades().get(subject) != null)
-            getNecessaryStudent(student).getGrades().put(subject, grade);
+        if (!checkIsValid(student)) return false;
+        if (!checkIsValid(subject)) return false;
+        if (!checkIsValid(grade)) return false;
+        if (!checkIsValid(getNecessaryStudent(student))) return false;
+
+        if (Objects.requireNonNull(getNecessaryStudent(student)).getGrades().containsKey(subject) &&
+                Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) != null)
+            Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, grade);
         else return false;
         System.out.println("Оценка по предмету " + subject + " изменена у студента " +  student + "!");
         return true;
     }
 
     public boolean deleteGrade(String student, String subject) {
-        if (subject == null || subject.isEmpty()) return false;
-        if (student == null || student.isEmpty()) return false;
-        if (getNecessaryStudent(student).getGrades().containsKey(subject) && getNecessaryStudent(student).getGrades().get(subject) != null)
-        getNecessaryStudent(student).getGrades().put(subject, null);
+        if (!checkIsValid(student)) return false;
+        if (!checkIsValid(subject)) return false;
+        if (!checkIsValid(getNecessaryStudent(student))) return false;
+
+        if (Objects.requireNonNull(getNecessaryStudent(student)).getGrades().containsKey(subject) &&
+                Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) != null)
+        Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, null);
         else return false;
         System.out.println("Оценка по предмету " + subject + " удалена у студента " +  student + "!");
         return true;

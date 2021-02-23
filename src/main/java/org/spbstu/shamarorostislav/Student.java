@@ -37,12 +37,19 @@ public class Student {
         return fullName;
     }
     public Map<String, Integer> getGrades() {
-        return grades;
+        return this.grades;
     }
 
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Student)) return false;
+        if (((Student) other).getFullName() == null || ((Student) other).getFullName().isEmpty()) return false;
+        if (((Student) other).getGrades() == null) return false;
+        for (Map.Entry<String, Integer> grade : ((Student) other).getGrades().entrySet()) {
+                if (grade.getKey().isEmpty()) return false;
+                if (grade.getValue() != null && (grade.getValue() < MIN_MARK || grade.getValue() > MAX_MARK))
+                   return false;
+            }
         if (((Student) other).getFullName().equals(this.getFullName())){
             if (this.getGrades().size() != (((Student) other).getGrades().size())) return false;
             for (String key: this.getGrades().keySet())

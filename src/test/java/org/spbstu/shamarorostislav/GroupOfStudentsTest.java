@@ -101,7 +101,7 @@ class GroupOfStudentsTest {
 
         assertTrue(group.addStudent(s1));
         assertTrue(group.deleteStudent("Поленков Владислав Вадимович"));
-
+        assertFalse(group.deleteStudent("Александр Костылев Олегович"));
         assertFalse(group.deleteStudent(null));
         assertFalse(group.deleteStudent(""));
 
@@ -126,10 +126,9 @@ class GroupOfStudentsTest {
         for (Student st : group.getGroup())
             if (!st.getGrades().containsKey("Овт")) counter++;
         assertEquals(group.getGroup().size(), counter);
-        assertThrows(IllegalArgumentException.class, () -> group.deleteStudent("Сухов Артем Сергеевич"));
         assertTrue(group.deleteSubject("Физическая культура"));
-        assertFalse(group.addSubject(""));
-        assertFalse(group.addSubject(null));
+        assertFalse(group.deleteSubject(""));
+        assertFalse(group.deleteSubject(null));
     }
 
     @Test
@@ -138,7 +137,7 @@ class GroupOfStudentsTest {
         assertFalse(group.addGrade("", "Высшая математика", 5));
         assertFalse(group.addGrade("Шамаро Ростислав Витальевич", "", 5));
         assertFalse(group.addGrade("Шамаро Ростислав Витальевич", null, 5));
-        assertThrows(IllegalArgumentException.class, () -> group.addGrade("Сухов Артем Сергеевич", "Овт", 5));
+        assertFalse(group.addGrade("Сухов Артем Сергеевич", "Овт", 5));
         assertFalse(group.addGrade("Шамаро Ростислав Витальевич", "Алгебра", 5));
         assertFalse(group.addGrade("Шамаро Ростислав Витальевич", "Овт", 2));
         assertFalse(group.addGrade("Нигматулин Артем Денисович", "Овт", 10));
@@ -159,7 +158,7 @@ class GroupOfStudentsTest {
         assertFalse(group.changeGrade("", "Высшая математика", 5));
         assertFalse(group.changeGrade("Шамаро Ростислав Витальевич", "", 5));
         assertFalse(group.changeGrade("Шамаро Ростислав Витальевич", null, 5));
-        assertThrows(IllegalArgumentException.class, () -> group.addGrade("Сухов Артем Сергеевич", "Овт", 5));
+        assertFalse(group.changeGrade("Сухов Артем Сергеевич", "Овт", 5));
         assertFalse(group.changeGrade("Шамаро Ростислав Витальевич", "Алгебра", 5));
         assertFalse(group.changeGrade("Нигматулин Артем Денисович", "Овт", 2));
         assertFalse(group.changeGrade("Декельман Григорий Павлович", "Овт", 10));
@@ -181,7 +180,7 @@ class GroupOfStudentsTest {
         assertFalse(group.deleteGrade("", "Высшая математика"));
         assertFalse(group.deleteGrade("Шамаро Ростислав Витальевич", ""));
         assertFalse(group.deleteGrade("Шамаро Ростислав Витальевич", null));
-        assertThrows(IllegalArgumentException.class, () -> group.addGrade("Сухов Артем Сергеевич", "Овт", 5));
+        assertFalse(group.deleteGrade("Сухов Артем Сергеевич", "Овт"));
         assertFalse(group.deleteGrade("Шамаро Ростислав Витальевич", "Алгебра"));
 
         group.deleteGrade("Декельман Григорий Павлович", "Овт");

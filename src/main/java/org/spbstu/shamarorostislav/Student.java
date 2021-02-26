@@ -26,6 +26,10 @@ public class Student {
                             "Mark must be in [" + MIN_MARK + ", " + MAX_MARK + ", but was: " + grade.getValue()
                     );
             }
+            for (String subject: grades.keySet())
+                if (grades.keySet().stream().map(String::toLowerCase).filter(str -> str.equals(subject.toLowerCase())).count() != 1)
+                    throw new IllegalArgumentException("Subject cannot be repeated");
+
             this.grades = grades;
         } else {
             this.grades = new HashMap<>();
@@ -40,7 +44,7 @@ public class Student {
         return this.grades;
     }
 
-    @Override
+        @Override
     public boolean equals(Object other) {
         if (!(other instanceof Student)) return false;
         if (((Student) other).getFullName() == null || ((Student) other).getFullName().isEmpty()) return false;

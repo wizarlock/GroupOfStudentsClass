@@ -1,6 +1,5 @@
 package org.spbstu.shamarorostislav;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,43 +14,44 @@ class GroupOfStudentsTest {
     GroupOfStudents group;
     GroupOfStudents group1;
     GroupOfStudents group2;
+    Map<String, Integer> educationalPerformanceForStudent0 = new HashMap<>();
+    Map<String, Integer> educationalPerformanceForStudent1 = new HashMap<>();
+    Map<String, Integer> educationalPerformanceForStudent2 = new HashMap<>();
+    Map<String, Integer> educationalPerformanceForStudent3 = new HashMap<>();
+    Map<String, Integer> educationalPerformanceForStudent4 = new HashMap<>();
     Map<String, Integer> educationalPerformanceForStudent5 = new HashMap<>();
+
 
     @BeforeEach
     void init() {
 
-        Map<String, Integer> educationalPerformanceForStudent0 = new HashMap<>();
         educationalPerformanceForStudent0.put("Высшая математика", 5);
         educationalPerformanceForStudent0.put("Физика", 3);
-        educationalPerformanceForStudent0.put("Программирование", 5);
+        educationalPerformanceForStudent0.put("ПРОграмМироВание", 5);
         educationalPerformanceForStudent0.put("Физическая культура", 5);
         educationalPerformanceForStudent0.put("Овт", 3);
 
-        Map<String, Integer> educationalPerformanceForStudent1 = new HashMap<>();
         educationalPerformanceForStudent1.put("Высшая математика", 4);
         educationalPerformanceForStudent1.put("Физика", 4);
         educationalPerformanceForStudent1.put("Программирование", 3);
         educationalPerformanceForStudent1.put("Физическая культура", 5);
         educationalPerformanceForStudent1.put("Овт", 5);
 
-        Map<String, Integer> educationalPerformanceForStudent2 = new HashMap<>();
         educationalPerformanceForStudent2.put("Высшая математика", 3);
         educationalPerformanceForStudent2.put("Физика", 5);
         educationalPerformanceForStudent2.put("Программирование", 4);
         educationalPerformanceForStudent2.put("Физическая культура", 5);
         educationalPerformanceForStudent2.put("Овт", 2);
 
-        Map<String, Integer> educationalPerformanceForStudent3 = new HashMap<>();
         educationalPerformanceForStudent3.put("Высшая математика", 5);
         educationalPerformanceForStudent3.put("Физика", 4);
         educationalPerformanceForStudent3.put("Программирование", 3);
         educationalPerformanceForStudent3.put("Физическая культура", 4);
         educationalPerformanceForStudent3.put("Овт", 4);
 
-        Map<String, Integer> educationalPerformanceForStudent4 = new HashMap<>();
         educationalPerformanceForStudent4.put("Высшая математика", 5);
         educationalPerformanceForStudent4.put("Физика", 5);
-        educationalPerformanceForStudent4.put("Программирование", 5);
+        educationalPerformanceForStudent4.put("ПРОГРАММИРОВАНИЕ", 5);
         educationalPerformanceForStudent4.put("Физическая культура", 5);
         educationalPerformanceForStudent4.put("Овт", null);
 
@@ -126,6 +126,7 @@ class GroupOfStudentsTest {
         for (Student st : group.getGroup())
             if (!st.getGrades().containsKey("Овт")) counter++;
         assertEquals(group.getGroup().size(), counter);
+
         assertTrue(group.deleteSubject("Физическая культура"));
         assertFalse(group.deleteSubject(""));
         assertFalse(group.deleteSubject(null));

@@ -1,5 +1,6 @@
 package org.spbstu.shamarorostislav;
 
+import javax.security.auth.Subject;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class GroupOfStudents {
 
     private final List<Student> students = new ArrayList<>();
 
-        public List<Student> getGroup() {
+    public List<Student> getGroup() {
         return this.students;
     }
 
@@ -62,10 +63,10 @@ public class GroupOfStudents {
     }
 
     private Student getNecessaryStudent(String name) {
-        for (Student st : students)
-            if (name.toLowerCase().equals(st.getFullName().toLowerCase()))
-                return st;
-            return null;
+        List <Student> NecessaryStudent = students.stream().filter(str -> str.getFullName().toLowerCase().equals(name.toLowerCase())).
+                collect(Collectors.toList());
+        if (NecessaryStudent.isEmpty()) return null;
+        else return NecessaryStudent.get(0);
     }
 
     public boolean deleteStudent(String name) {
@@ -83,15 +84,19 @@ public class GroupOfStudents {
             if (!st.getGrades().keySet().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(subject.toLowerCase()))
                 st.getGrades().put(subject, null);
         }
-        System.out.println("Предмет " + subject + " появился у каждого студента!");
+        System.out.println("Предмет " + subject + " отсутствует у каждого студента!");
         return true;
     }
 
     public boolean deleteSubject(String subject) {
         if (!checkIsValid(subject)) return false;
-        for (Student st : students)
-            st.getGrades().remove(subject);
-        System.out.println("Предмет " + subject + " удален у каждого студента!");
+        String subjectInMap = "";
+        for (Student st : students) {
+            for (String sub: st.getGrades().keySet())
+                if (sub.toLowerCase().equals(subject.toLowerCase())) subjectInMap = sub;
+            st.getGrades().remove(subjectInMap);
+        }
+        System.out.println("Предмет " + subject + " отсутствует у каждого студента!");
         return true;
     }
 

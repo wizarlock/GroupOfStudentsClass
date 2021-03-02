@@ -15,21 +15,18 @@ public class Student {
     public Student(@NotNull String fullName, Map<@NotNull String, Integer> grades) {
         if (fullName.isEmpty())
             throw new IllegalArgumentException("Name must be not empty");
-
         if (grades != null) {
             for (Map.Entry<String, Integer> grade : grades.entrySet()) {
                 if (grade.getKey().isEmpty())
                     throw new IllegalArgumentException("Subject's name must be not empty");
-
                 if (grade.getValue() != null && (grade.getValue() < MIN_MARK || grade.getValue() > MAX_MARK))
                     throw new IllegalArgumentException(
                             "Mark must be in [" + MIN_MARK + ", " + MAX_MARK + ", but was: " + grade.getValue()
                     );
             }
             for (String subject: grades.keySet())
-                if (grades.keySet().stream().map(String::toLowerCase).filter(str -> str.equals(subject.toLowerCase())).count() != 1)
+                if (grades.keySet().stream().map(String::toLowerCase).filter(str -> str.equalsIgnoreCase(subject)).count() != 1)
                     throw new IllegalArgumentException("Subject cannot be repeated");
-
             this.grades = grades;
         } else {
             this.grades = new HashMap<>();
@@ -61,6 +58,11 @@ public class Student {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return fullName;
     }
 
     @Override

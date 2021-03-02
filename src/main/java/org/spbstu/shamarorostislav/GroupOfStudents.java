@@ -1,12 +1,11 @@
 package org.spbstu.shamarorostislav;
 
-import javax.security.auth.Subject;
-import java.security.Key;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.stream.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.spbstu.shamarorostislav.Student.MAX_MARK;
 import static org.spbstu.shamarorostislav.Student.MIN_MARK;
@@ -24,6 +23,8 @@ import static org.spbstu.shamarorostislav.Student.MIN_MARK;
 public class GroupOfStudents {
 
     private String groupNumber;
+
+    private static final Logger logger = Logger.getLogger(GroupOfStudents.class);
 
     public void setGroupNumber(String groupNumber) {
         this.groupNumber = groupNumber;
@@ -51,7 +52,7 @@ public class GroupOfStudents {
     public boolean addStudent(Student student) {
         if (!checkIsValid(student)) return false;
         students.add(student);
-        System.out.println("Студент появился в списке!");
+        logger.info("Теперь студент " + student + " появился в списке!");
         return true;
     }
 
@@ -63,17 +64,17 @@ public class GroupOfStudents {
     }
 
     private Student getNecessaryStudent(String name) {
-        List <Student> NecessaryStudent = students.stream().filter(str -> str.getFullName().toLowerCase().equals(name.toLowerCase())).
+        List <Student> necessaryStudent = students.stream().filter(str -> str.getFullName().equalsIgnoreCase(name)).
                 collect(Collectors.toList());
-        if (NecessaryStudent.isEmpty()) return null;
-        else return NecessaryStudent.get(0);
+        if (necessaryStudent.isEmpty()) return null;
+        else return necessaryStudent.get(0);
     }
 
     public boolean deleteStudent(String name) {
         if (!checkIsValid(name)) return false;
         if (!checkIsValid(getNecessaryStudent(name))) return false;
         students.remove(getNecessaryStudent(name));
-        System.out.println("Теперь студент " + name + " отсутствует в списке!");
+        logger.info("Теперь студент " + name + " отсутствует в списке!");
         return true;
     }
 
@@ -84,7 +85,7 @@ public class GroupOfStudents {
             if (!st.getGrades().keySet().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(subject.toLowerCase()))
                 st.getGrades().put(subject, null);
         }
-        System.out.println("Предмет " + subject + " отсутствует у каждого студента!");
+        logger.info("Предмет " + subject + " теперь есть у каждого студента!");
         return true;
     }
 
@@ -93,10 +94,10 @@ public class GroupOfStudents {
         String subjectInMap = "";
         for (Student st : students) {
             for (String sub: st.getGrades().keySet())
-                if (sub.toLowerCase().equals(subject.toLowerCase())) subjectInMap = sub;
+                if (sub.equalsIgnoreCase(subject)) subjectInMap = sub;
             st.getGrades().remove(subjectInMap);
         }
-        System.out.println("Предмет " + subject + " отсутствует у каждого студента!");
+        logger.info("Предмет " + subject + " теперь отсутствует у каждого студента!");
         return true;
     }
 
@@ -110,7 +111,7 @@ public class GroupOfStudents {
                 Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) == null)
             Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, grade);
                 else return false;
-        System.out.println("Оценка добавлена у " + student + " по предмету " + subject + "!");
+        logger.info("Оценка добавлена у " + student + " по предмету " + subject + "!");
                 return true;
     }
 
@@ -124,7 +125,7 @@ public class GroupOfStudents {
                 Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) != null)
             Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, grade);
         else return false;
-        System.out.println("Оценка по предмету " + subject + " изменена у студента " +  student + "!");
+        logger.info("Оценка по предмету " + subject + " изменена у студента " +  student + "!");
         return true;
     }
 
@@ -134,10 +135,9 @@ public class GroupOfStudents {
         if (!checkIsValid(getNecessaryStudent(student))) return false;
 
         if (Objects.requireNonNull(getNecessaryStudent(student)).getGrades().containsKey(subject) &&
-                Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) != null)
-        Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, null);
+                Objects.requireNonNull(getNecessaryStudent(student)).getGrades().get(subject) != null) Objects.requireNonNull(getNecessaryStudent(student)).getGrades().put(subject, null);
         else return false;
-        System.out.println("Оценка по предмету " + subject + " удалена у студента " +  student + "!");
+        logger.info("Оценка по предмету " + subject + " удалена у студента " +  student + "!");
         return true;
     }
 
@@ -158,6 +158,3 @@ public class GroupOfStudents {
         return true;
     }
     }
-
-
-

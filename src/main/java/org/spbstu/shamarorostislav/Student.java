@@ -10,9 +10,10 @@ public class Student {
     public static final int MIN_MARK = 1;
     public static final int MAX_MARK = 5;
     private final String fullName ;
-    private final Map<String, Integer> grades;
+    private Map<String, Integer> grades;
 
     public Student(@NotNull String fullName, Map<@NotNull String, Integer> grades) {
+        Map <String, Integer> newGrades = new HashMap<>();
         if (fullName.isEmpty())
             throw new IllegalArgumentException("Name must be not empty");
         if (grades != null) {
@@ -27,7 +28,10 @@ public class Student {
             for (String subject: grades.keySet())
                 if (grades.keySet().stream().map(String::toLowerCase).filter(str -> str.equalsIgnoreCase(subject)).count() != 1)
                     throw new IllegalArgumentException("Subject cannot be repeated");
-            this.grades = grades;
+            for (Map.Entry<String, Integer> gr : grades.entrySet()) {
+                newGrades.put(gr.getKey(), gr.getValue());
+                this.grades = newGrades;
+            }
         } else {
             this.grades = new HashMap<>();
         }

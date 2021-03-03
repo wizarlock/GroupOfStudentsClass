@@ -59,7 +59,7 @@ public class GroupOfStudents {
     public GroupOfStudents(Student... students) {
         if (checkIsValid(students))
             for (Student st : students) {
-                this.addStudent(st);
+                addStudent(st);
             }
     }
 
@@ -80,7 +80,6 @@ public class GroupOfStudents {
 
     public boolean addSubject(String subject) {
         if (!checkIsValid(subject)) return false;
-
         for (Student st : students) {
             if (!st.getGrades().keySet().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(subject.toLowerCase()))
                 st.getGrades().put(subject, null);

@@ -143,6 +143,7 @@ class GroupOfStudentsTest {
         assertFalse(group.addGrade("Шамаро Ростислав Витальевич", "Овт", 2));
         assertFalse(group.addGrade("Нигматулин Артем Денисович", "Овт", 10));
 
+        educationalPerformanceForStudent4.remove("Высшая математика");
         group.addGrade("Нигматулин Артем Денисович", "Овт", 4);
         Integer gr = 0;
         for (Student st : group.getGroup())

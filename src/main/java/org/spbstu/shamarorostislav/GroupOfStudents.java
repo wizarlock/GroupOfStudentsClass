@@ -49,7 +49,7 @@ public class GroupOfStudents {
     }
 
     public boolean addStudent(Student student) {
-        if (!checkIsValid(student)) throw new IllegalArgumentException("Студент задан некорректно");
+        if (!checkIsValid(student)) throw new IllegalArgumentException("Student is entered incorrectly");
         students.add(student);
         logger.info("Теперь студент " + student + " появился в списке!");
         return true;
@@ -67,7 +67,7 @@ public class GroupOfStudents {
     }
 
     public boolean deleteStudent(String name) {
-        if (!checkIsValid(name)) throw new IllegalArgumentException("Имя задано некорректно");
+        if (!checkIsValid(name)) throw new IllegalArgumentException("Name is entered incorrectly");
         if (!checkIsValid(getNecessaryStudent(name))) return false;
         students.remove(getNecessaryStudent(name).orElseThrow());
         logger.info("Теперь студент " + name + " отсутствует в списке!");
@@ -75,7 +75,7 @@ public class GroupOfStudents {
     }
 
     public boolean addSubject(String subject) {
-        if (!checkIsValid(subject)) throw new IllegalArgumentException("Предмет задан некорректно");
+        if (!checkIsValid(subject)) throw new IllegalArgumentException("Subject is entered incorrectly");
         for (Student st : students) {
             if (!st.grades.keySet().stream().map(String::toLowerCase).collect(Collectors.toList()).contains(subject.toLowerCase()))
                 st.grades.put(subject, null);
@@ -85,7 +85,7 @@ public class GroupOfStudents {
     }
 
     public boolean deleteSubject(String subject) {
-        if (!checkIsValid(subject)) throw new IllegalArgumentException("Предмет задан некорректно");
+        if (!checkIsValid(subject)) throw new IllegalArgumentException("Subject is entered incorrectly");
         for (Student st : students) {
             if (st.grades.keySet().stream().noneMatch(sub -> sub.equalsIgnoreCase(subject))) continue;
             st.grades.remove(st.grades.keySet().stream().filter(sub -> sub.equalsIgnoreCase(subject)).findFirst().orElseThrow());
@@ -95,9 +95,9 @@ public class GroupOfStudents {
     }
 
     public boolean addGrade(String name, String subject, Integer grade) {
-        if (!checkIsValid(name)) throw new IllegalArgumentException("Имя задано некорректно");
-        if (!checkIsValid(subject)) throw new IllegalArgumentException("Предмет задан некорректно");
-        if (!checkIsValid(grade)) throw new IllegalArgumentException("Оценка задана некорректно");
+        if (!checkIsValid(name)) throw new IllegalArgumentException("Name is entered incorrectly");
+        if (!checkIsValid(subject)) throw new IllegalArgumentException("Subject is entered incorrectly");
+        if (!checkIsValid(grade)) throw new IllegalArgumentException("Grade is entered incorrectly");
         if (!checkIsValid(getNecessaryStudent(name))) return false;
 
         if (getNecessaryStudent(name).orElseThrow().grades.containsKey(subject) &&
@@ -109,9 +109,9 @@ public class GroupOfStudents {
     }
 
     public boolean changeGrade(String name, String subject, Integer grade) {
-        if (!checkIsValid(name)) throw new IllegalArgumentException("Имя задано некорректно");
-        if (!checkIsValid(subject)) throw new IllegalArgumentException("Предмет задан некорректно");
-        if (!checkIsValid(grade)) throw new IllegalArgumentException("Оценка задана некорректно");
+        if (!checkIsValid(name)) throw new IllegalArgumentException("Name is entered incorrectly");
+        if (!checkIsValid(subject)) throw new IllegalArgumentException("Subject is entered incorrectly");
+        if (!checkIsValid(grade)) throw new IllegalArgumentException("Grade is entered incorrectly");
         if (!checkIsValid(getNecessaryStudent(name))) return false;
 
         if (getNecessaryStudent(name).orElseThrow().grades.containsKey(subject) &&
@@ -123,8 +123,8 @@ public class GroupOfStudents {
     }
 
     public boolean deleteGrade(String name, String subject) {
-        if (!checkIsValid(name)) throw new IllegalArgumentException("Имя задано некорректно");
-        if (!checkIsValid(subject)) throw new IllegalArgumentException("Предмет задан некорректно");
+        if (!checkIsValid(name)) throw new IllegalArgumentException("Name is entered incorrectly");
+        if (!checkIsValid(subject)) throw new IllegalArgumentException("Subject is entered incorrectly");
         if (!checkIsValid(getNecessaryStudent(name))) return false;
 
         if (getNecessaryStudent(name).orElseThrow().grades.containsKey(subject) &&
